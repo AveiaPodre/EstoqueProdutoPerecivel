@@ -89,4 +89,8 @@ public class ProdutoPerecivel extends Produto {
         }
         return quantVencidos;
     }
+
+    public void setLotes(ArrayList<Lote> lotes) {
+        this.lotes = lotes;
+    }
 }

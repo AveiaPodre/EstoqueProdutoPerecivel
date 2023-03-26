@@ -1,13 +1,10 @@
 package AverinaldoJunior.Estoque;
 
-import AverinaldoJunior.EstoqueComProdutoPerecivelExcecoes.InterfaceEstoqueComExcecoes;
-import AverinaldoJunior.EstoqueComProdutoPerecivelExcecoes.ProdutoInexistente;
-import AverinaldoJunior.EstoqueComProdutoPerecivelExcecoes.ProdutoVencido;
-import AverinaldoJunior.EstoqueComProdutoPerecivelExcecoes.ProdutoNaoPerecivel;
-import AverinaldoJunior.EstoqueComProdutoPerecivelExcecoes.DadosInvalidos;
-import AverinaldoJunior.EstoqueComProdutoPerecivelExcecoes.ProdutoJaCadastrado;
-import AverinaldoJunior.EstoqueComProdutoPerecivelExcecoes.ProdutoPerecivel;
+import AverinaldoJunior.DAO.DAOException;
+import AverinaldoJunior.DAO.ProdutoDAO;
+import AverinaldoJunior.EstoqueComProdutoPerecivelExcecoes.*;
 
+import java.sql.SQLException;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -15,20 +12,13 @@ import java.util.Date;
 import java.util.ArrayList;
 
 public class Estoque implements InterfaceEstoqueComExcecoes {
-    private ArrayList<Produto> produtos = new ArrayList<>();
     Date data = Date.from(Instant.now(Clock.system(ZoneId.of("America/Sao_Paulo"))));
 
-    public void incluir(Produto p) throws ProdutoJaCadastrado, DadosInvalidos{
+    public void incluir(Produto p) throws ProdutoJaCadastrado, DadosInvalidos, DAOException, SQLException {
         if(p == null || p.codigo<0 || p.descricao.isBlank() || p.fornecedor.getCnpj()<=0 || p.fornecedor == null){
             throw new DadosInvalidos();
         }
-        for (Produto produto: produtos) {
-            if (produto.getCodigo() == p.getCodigo()) {
-                throw new ProdutoJaCadastrado();
-            }
-        }
-
-        this.produtos.add(p);
+        ProdutoDAO.inserir(p);
     }
 
     public void comprar(int cod, int quant, double preco, Date val)  throws ProdutoInexistente, DadosInvalidos, ProdutoNaoPerecivel{
@@ -65,12 +55,8 @@ public class Estoque implements InterfaceEstoqueComExcecoes {
     }
 
     @Override
-    public Produto pesquisar (int cod) throws ProdutoInexistente {
-        for(Produto produto : produtos){
-            if(produto.getCodigo() == cod){
-                return produto;
-            }
-        }
+    public Produto pesquisar (int cod) throws ProdutoInexistente, DAOException, SQLException {
+        ProdutoDAO.pesquisar(cod);
         throw new ProdutoInexistente();
     }
 

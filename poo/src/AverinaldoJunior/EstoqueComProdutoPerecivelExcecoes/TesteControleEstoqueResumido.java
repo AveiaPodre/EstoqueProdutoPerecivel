@@ -1,8 +1,11 @@
 package AverinaldoJunior.EstoqueComProdutoPerecivelExcecoes;
 
 import static org.junit.Assert.*;
+
+import AverinaldoJunior.DAO.DAOException;
 import AverinaldoJunior.Estoque.*;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -11,7 +14,7 @@ import org.junit.Test;
 public class TesteControleEstoqueResumido {
 
 	@Test
-	public void testarCadastroProduto() throws ProdutoJaCadastrado, DadosInvalidos, ProdutoInexistente {
+	public void testarCadastroProduto() throws ProdutoJaCadastrado, DadosInvalidos, ProdutoInexistente, DAOException, SQLException {
 		Fornecedor f1 = new Fornecedor(1, "Forn1");
 		Produto p1 = new Produto(1, "coca-cola", 5, 0.20, f1);
 

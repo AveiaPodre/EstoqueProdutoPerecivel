@@ -52,8 +52,15 @@ public class Produto {
         this.precoDeVenda = this.precoDeCompra + (this.precoDeCompra * this.lucro);
     }
 
+    public void setPrecoDeCompra(double precoDeCompra){
+        this.precoDeCompra = precoDeCompra;
+    }
     public int getQuantidade(){
         return this.quantidade;
+    }
+
+    public void setQuantidade(int quantidade){
+        this.quantidade = quantidade;
     }
 
     public int getCodigo() {
@@ -78,6 +85,10 @@ public class Produto {
 
     public double getPrecoDeVenda(){
         return precoDeVenda;
+    }
+
+    public void setPrecoDeVenda(double precoDeVenda) {
+        this.precoDeVenda = precoDeVenda;
     }
 
     public double getLucro(){

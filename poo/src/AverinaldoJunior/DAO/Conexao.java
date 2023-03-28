@@ -5,26 +5,29 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Conexao {
-    private static Connection con = null;
 
-    public static Connection getCon() throws DAOException {
-        if (con == null) {
-            try {
-                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/estoque", "root", "Jr11062004#");
-            } catch (SQLException e) {
-                throw new DAOException(e.getMessage());
+    private static Connection conexoes[] = null;
+    private static int atual = 0;
+    private static boolean conectou = false;
+    private static final int quantidade = 10;
+
+    public static Connection conectar() throws ClassNotFoundException, SQLException {
+
+        if (!conectou) {
+            conexoes = new Connection[quantidade];
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            for (int i = 0; i < quantidade; i++) {
+                conexoes[i] = DriverManager.getConnection("jdbc:mysql://localhost/estoque", "root", "Jr11062004#");
             }
+            conectou = true;
         }
-        return con;
+
+        if (atual == quantidade) {
+            atual = 0;
+        }
+        return conexoes[atual++];
     }
 
-    public void closeCon() throws DAOException {
-        if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                throw new DAOException(e.getMessage());
-            }
-        }
+    private Conexao() {
     }
 }
